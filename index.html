@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index,follow">
+  <title>miolo</title>
+  <meta name="description" content="miolo. Conteudo visual para gastronomia, produto e hospitalidade.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="miolo">
+  <meta property="og:title" content="miolo">
+  <meta property="og:description" content="Conteudo visual para gastronomia, produto e hospitalidade.">
+  <meta property="og:url" content="https://miolo.online/">
+  <meta property="og:image" content="https://miolo.online/img/brand/miolo-lockup.svg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="miolo - conteudo visual para gastronomia, produto e hospitalidade">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="miolo">
+  <meta name="twitter:description" content="Conteudo visual para gastronomia, produto e hospitalidade.">
+  <meta name="twitter:image" content="https://miolo.online/img/brand/miolo-lockup.svg">
+  <link rel="icon" type="image/svg+xml" href="img/brand/miolo-symbol.svg">
+  <style>
+    :root {
+      --paper: #f3efe6;
+      --gap: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--paper);
+    }
+
+    body {
+      font-family: Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    #photo-wall {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      width: 100vw;
+      height: 100vh;
+      gap: var(--gap);
+      padding: 0;
+      background: var(--paper);
+    }
+
+    .wall-item {
+      position: relative;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      background: #e7e1d3;
+    }
+
+    .wall-item img {
+      transition: transform 0.9s ease;
+      transform: scale(1.001);
+    }
+
+    .wall-item:hover img {
+      transform: scale(1.035);
+    }
+
+    @media (max-width: 1024px) {
+      :root {
+        --gap: 7px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      :root {
+        --gap: 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main id="photo-wall" aria-label="Mosaico de imagens da miolo"></main>
+
+  <script>
+    (() => {
+      const wall = document.getElementById('photo-wall');
+
+      const wallImages = [
+        'img/grid/20181111-Copa-Cozinha-00002.webp',
+        'img/grid/20181111-Copa-Cozinha-00006.webp',
+        'img/grid/20191009-Curamagoa-7941015.webp',
+        'img/grid/20191009-Curamagoa-7942031.webp',
+        'img/grid/20191204-Cozinha-da-Vo-Ana-0002.webp',
+        'img/grid/20191204-Cozinha-da-Vo-Ana-0004.webp',
+        'img/grid/20200723-Forno-da-Saudade-0001.webp',
+        'img/grid/20200723-Forno-da-Saudade-0011.webp',
+        'img/grid/20210528-Capim-Rosa-4842.webp',
+        'img/grid/20210528-Capim-Rosa-4860.webp',
+        'img/grid/20210906-Tapecaria-Aveia-2148.webp',
+        'img/grid/20210906-Tapecaria-Aveia-2179.webp',
+        'img/grid/20211126-Capim-Rosa-2653.webp',
+        'img/grid/20211126-Capim-Rosa-2656.webp',
+        'img/grid/20220901-Enquanto0279.webp',
+        'img/grid/20220901-Enquanto0446.webp',
+        'img/grid/20230613-Juramento-202-2592.webp',
+        'img/grid/20230613-Juramento-202-2626.webp',
+        'img/grid/20230807-Tapecaria-Aveia-3203.webp',
+        'img/grid/20230807-Tapecaria-Aveia-3258.webp',
+        'img/grid/20231006-Distribuidora-Goitacazes-4504.webp',
+        'img/grid/20231006-Distribuidora-Goitacazes-4529.webp',
+        'img/grid/20231207-Cozinha-Tupis-5842.webp',
+        'img/grid/20231207-Cozinha-Tupis-5865.webp',
+        'img/grid/20240228-Casinha-do-Jura.webp',
+        'img/grid/20240308-Oficina-Paraiso-8109.webp',
+        'img/grid/20240404-Juramento-202-8670.webp',
+        'img/grid/20240404-Juramento-202-8679.webp',
+        'img/grid/20240418-Tapecaria-Aveia-9762.webp',
+        'img/grid/20240418-Tapecaria-Aveia-9927.webp',
+        'img/grid/20240419-Guaramao-0383.webp',
+        'img/grid/20240427-Copa-Cozinha-0800.webp',
+        'img/grid/20241106-Cozinha-Tupis-0556.webp',
+        'img/grid/20241106-Cozinha-Tupis-0612.webp',
+        'img/grid/20250627-Cozinha-Tupis-4226.webp',
+        'img/grid/20250627-Cozinha-Tupis-4327.webp',
+        'img/grid/20250627-Cozinha-Tupis-4349.webp',
+        'img/grid/20250724-Forno-da-Saudade-4992.webp',
+        'img/grid/20250724-Forno-da-Saudade-5044.webp',
+        'img/grid/20250918-Cafe-Nice-7921.webp',
+        'img/grid/20250918-Cafe-Nice-7928.webp',
+        'img/grid/20251009-Hacienda-1979-8301.webp',
+        'img/grid/20251009-Hacienda-1979-8304.webp',
+        'img/grid/20251021-Cozinha-Tupis-8902.webp',
+        'img/grid/20251021-Cozinha-Tupis-8971.webp',
+        'img/grid/20251114-Copa-Cozinha-0165.webp',
+        'img/grid/20251114-Copa-Cozinha-0410.webp',
+        'img/grid/Casa-Alvorada-0128.webp',
+        'img/grid/enquanto_pochete_envelope_kraft_01.webp',
+        'img/grid/paodequeijo_bernardosilva_2024_001.webp',
+        'img/grid/paodequeijo_bernardosilva_2024_002.webp',
+        'img/grid/7941015.webp',
+        'img/grid/1985.webp'
+      ];
+
+      const layoutConfigs = [
+        {
+          breakpoint: 640,
+          columns: 10,
+          rows: 12,
+          gap: 6,
+          shapes: [
+            { columns: 2, rows: 3, orientation: 'vertical' },
+            { columns: 3, rows: 2, orientation: 'horizontal' }
+          ]
+        },
+        {
+          breakpoint: 1024,
+          columns: 16,
+          rows: 12,
+          gap: 7,
+          shapes: [
+            { columns: 3, rows: 4, orientation: 'vertical' },
+            { columns: 4, rows: 3, orientation: 'horizontal' }
+          ]
+        },
+        {
+          breakpoint: Infinity,
+          columns: 24,
+          rows: 12,
+          gap: 8,
+          shapes: [
+            { columns: 3, rows: 4, orientation: 'vertical' },
+            { columns: 4, rows: 3, orientation: 'horizontal' }
+          ]
+        }
+      ];
+
+      let lastConfigKey = '';
+
+      function shuffle(array) {
+        const copy = array.slice();
+
+        for (let index = copy.length - 1; index > 0; index -= 1) {
+          const randomIndex = Math.floor(Math.random() * (index + 1));
+          [copy[index], copy[randomIndex]] = [copy[randomIndex], copy[index]];
+        }
+
+        return copy;
+      }
+
+      function getConfig() {
+        return layoutConfigs.find((config) => window.innerWidth <= config.breakpoint) || layoutConfigs[layoutConfigs.length - 1];
+      }
+
+      function getFirstEmptyCell(occupancy, columns, rows) {
+        for (let row = 0; row < rows; row += 1) {
+          for (let column = 0; column < columns; column += 1) {
+            if (!occupancy[row][column]) {
+              return { column, row };
+            }
+          }
+        }
+
+        return null;
+      }
+
+      function shapeFits(occupancy, startColumn, startRow, shape, columns, rows) {
+        if (startColumn + shape.columns > columns || startRow + shape.rows > rows) {
+          return false;
+        }
+
+        for (let row = startRow; row < startRow + shape.rows; row += 1) {
+          for (let column = startColumn; column < startColumn + shape.columns; column += 1) {
+            if (occupancy[row][column]) {
+              return false;
+            }
+          }
+        }
+
+        return true;
+      }
+
+      function markShape(occupancy, startColumn, startRow, shape) {
+        for (let row = startRow; row < startRow + shape.rows; row += 1) {
+          for (let column = startColumn; column < startColumn + shape.columns; column += 1) {
+            occupancy[row][column] = true;
+          }
+        }
+      }
+
+      function buildPlacements(config) {
+        const tileArea = config.shapes[0].columns * config.shapes[0].rows;
+        const itemCount = (config.columns * config.rows) / tileArea;
+        const maxAttempts = 400;
+
+        for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+          const occupancy = Array.from({ length: config.rows }, () => Array(config.columns).fill(false));
+          const placements = [];
+          let failed = false;
+
+          while (placements.length < itemCount) {
+            const cell = getFirstEmptyCell(occupancy, config.columns, config.rows);
+
+            if (!cell) break;
+
+            const candidateShapes = shuffle(config.shapes).filter((shape) => (
+              shapeFits(occupancy, cell.column, cell.row, shape, config.columns, config.rows)
+            ));
+
+            if (!candidateShapes.length) {
+              failed = true;
+              break;
+            }
+
+            const shape = candidateShapes[0];
+            markShape(occupancy, cell.column, cell.row, shape);
+            placements.push({
+              column: cell.column,
+              row: cell.row,
+              columns: shape.columns,
+              rows: shape.rows,
+              orientation: shape.orientation
+            });
+          }
+
+          if (!failed && placements.length === itemCount) {
+            return shuffle(placements);
+          }
+        }
+
+        return [];
+      }
+
+      function createWallItem(imageSrc, placement, index) {
+        const figure = document.createElement('figure');
+        const image = document.createElement('img');
+
+        figure.className = 'wall-item';
+        figure.style.gridColumn = `${placement.column + 1} / span ${placement.columns}`;
+        figure.style.gridRow = `${placement.row + 1} / span ${placement.rows}`;
+        figure.dataset.orientation = placement.orientation;
+
+        image.src = imageSrc;
+        image.alt = '';
+        image.loading = index < 8 ? 'eager' : 'lazy';
+        image.decoding = 'async';
+
+        figure.appendChild(image);
+        return figure;
+      }
+
+      function renderWall() {
+        const config = getConfig();
+        const configKey = `${config.columns}x${config.rows}`;
+
+        wall.style.setProperty('--gap', `${config.gap}px`);
+        wall.style.gridTemplateColumns = `repeat(${config.columns}, minmax(0, 1fr))`;
+        wall.style.gridTemplateRows = `repeat(${config.rows}, minmax(0, 1fr))`;
+
+        const placements = buildPlacements(config);
+        const chosenImages = shuffle(wallImages);
+        const fragment = document.createDocumentFragment();
+
+        wall.innerHTML = '';
+
+        placements.forEach((placement, index) => {
+          const imageSrc = chosenImages[index % chosenImages.length];
+          fragment.appendChild(createWallItem(imageSrc, placement, index));
+        });
+
+        wall.appendChild(fragment);
+        lastConfigKey = configKey;
+      }
+
+      let resizeFrame = 0;
+
+      function handleResize() {
+        cancelAnimationFrame(resizeFrame);
+        resizeFrame = requestAnimationFrame(() => {
+          const nextConfig = getConfig();
+          const nextKey = `${nextConfig.columns}x${nextConfig.rows}`;
+
+          if (nextKey !== lastConfigKey) {
+            renderWall();
+          }
+        });
+      }
+
+      renderWall();
+      window.addEventListener('resize', handleResize);
+    })();
+  </script>
+</body>
+</html>
