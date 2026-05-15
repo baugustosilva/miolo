@@ -22,8 +22,18 @@
   <link rel="icon" type="image/svg+xml" href="img/brand/miolo-symbol.svg">
   <style>
     :root {
-      --paper: #f3efe6;
-      --gap: 8px;
+      --paper: #fafafa;
+      --ink: #1d1d1b;
+      --muted: rgba(29, 29, 27, 0.72);
+      --strip-gap: 2px;
+      --outer-gutter: 12px;
+      --meta-size: 9px;
+      --meta-track: 0.08em;
+      --edge-band: 42px;
+      --hover-scale: 1.5;
+      --lateral-gap: 4px;
+      --miolo-grid-scale: 0.25;
+      --lateral-tile-size: calc((100vh - (var(--edge-band) * 2)) * var(--miolo-grid-scale));
     }
 
     * {
@@ -34,296 +44,593 @@
     body {
       margin: 0;
       width: 100%;
-      height: 100%;
-      overflow: hidden;
+      min-height: 100%;
       background: var(--paper);
+      overflow: hidden;
     }
 
     body {
+      position: relative;
       font-family: Helvetica, Arial, sans-serif;
+      color: var(--ink);
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
     }
 
     img {
       display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+      max-width: 100%;
     }
 
-    #photo-wall {
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .edge-meta {
       position: fixed;
-      inset: 0;
-      display: grid;
+      left: 0;
+      right: 0;
+      z-index: 3;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 12px var(--outer-gutter);
+      font-size: var(--meta-size);
+      font-weight: 700;
+      letter-spacing: var(--meta-track);
+      text-transform: uppercase;
+      line-height: 1;
+      color: var(--ink);
+      pointer-events: none;
+      mix-blend-mode: multiply;
+    }
+
+    .edge-meta--top {
+      top: 0;
+    }
+
+    .edge-meta--bottom {
+      bottom: 0;
+      align-items: flex-end;
+    }
+
+    .edge-meta__center,
+    .edge-meta__right,
+    .edge-meta__left {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      white-space: nowrap;
+    }
+
+    .edge-meta__center {
+      justify-content: center;
+      flex: 1 1 auto;
+    }
+
+    .edge-meta__brand {
+      width: clamp(116px, 15vw, 210px);
+      height: auto;
+      filter: brightness(0) saturate(100%);
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .edge-meta__left,
+    .edge-meta__right {
+      flex: 0 0 auto;
+    }
+
+    .edge-meta__bottom-note {
+      max-width: 180px;
+      white-space: normal;
+      line-height: 1.16;
+      text-align: left;
+    }
+
+    .stage {
+      position: relative;
       width: 100vw;
       height: 100vh;
-      gap: var(--gap);
-      padding: 0;
-      background: var(--paper);
-    }
-
-    .wall-item {
-      position: relative;
-      min-width: 0;
-      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--edge-band) 0;
       overflow: hidden;
-      background: #e7e1d3;
     }
 
-    .wall-item img {
-      transition: transform 0.9s ease;
-      transform: scale(1.001);
+    .strip-shell {
+      width: 100vw;
+      min-height: calc(100vh - (var(--edge-band) * 2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .wall-item:hover img {
-      transform: scale(1.035);
+    .strip-rows {
+      position: relative;
+      width: 100vw;
+      height: var(--lateral-tile-size);
+      overflow: visible;
+      cursor: ew-resize;
+      user-select: none;
     }
 
-    @media (max-width: 1024px) {
+    .lateral-track {
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      height: 100%;
+      width: max-content;
+      min-width: 100%;
+      overflow: visible;
+    }
+
+    .lateral-row-track {
+      display: flex;
+      align-items: stretch;
+      gap: var(--lateral-gap);
+      height: 100%;
+      width: max-content;
+      overflow: visible;
+      will-change: transform;
+    }
+
+    .lateral-segment {
+      display: flex;
+      align-items: stretch;
+      gap: var(--lateral-gap);
+      height: 100%;
+      width: max-content;
+      flex: none;
+      overflow: visible;
+    }
+
+    .strip-item {
+      position: relative;
+      display: flex;
+      align-items: stretch;
+      flex: 0 0 auto;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #ecece8;
+      width: var(--item-width, 120px);
+      height: 100%;
+      flex-basis: var(--item-width, 120px);
+      transform-origin: center center;
+      isolation: isolate;
+      will-change: transform;
+      transition: transform 0.55s ease;
+    }
+
+    .strip-item img {
+      width: auto;
+      height: 100%;
+      max-width: none;
+      object-fit: contain;
+      object-position: center;
+      filter: grayscale(1) brightness(0.98) contrast(1.02);
+      transform: scale(1.002);
+      transition: filter 0.35s ease;
+    }
+
+    .strip-item:hover img {
+      filter: grayscale(0) brightness(1) contrast(1);
+    }
+
+    @media (max-width: 960px) {
       :root {
-        --gap: 7px;
+        --outer-gutter: 10px;
+        --edge-band: 40px;
+        --lateral-gap: 0px;
+      }
+
+      .edge-meta__right,
+      .edge-meta__left {
+        gap: 10px;
+      }
+
+      .edge-meta__brand {
+        width: clamp(108px, 20vw, 176px);
       }
     }
 
     @media (max-width: 640px) {
       :root {
-        --gap: 6px;
+        --outer-gutter: 8px;
+        --meta-size: 8px;
+        --edge-band: 34px;
+        --lateral-gap: 0px;
+        --miolo-grid-scale: 0.62;
+      }
+
+      .edge-meta__bottom-note {
+        max-width: 124px;
+      }
+
+      .edge-meta__brand {
+        width: clamp(92px, 28vw, 132px);
+      }
+
+      .strip-rows {
+        cursor: default;
+        overflow: visible;
+        width: min(92vw, 520px);
+        height: auto;
+      }
+
+      .lateral-track,
+      .lateral-row-track,
+      .lateral-segment {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .strip-item {
+        width: 100%;
+        height: auto;
+        margin-bottom: 20px;
+      }
+
+      .strip-item img {
+        width: 100%;
+        height: auto;
       }
     }
   </style>
 </head>
 <body>
-  <main id="photo-wall" aria-label="Mosaico de imagens da miolo"></main>
+  <header class="edge-meta edge-meta--top" aria-hidden="true">
+    <div class="edge-meta__left">miolo online</div>
+    <div class="edge-meta__center">
+      <img class="edge-meta__brand" src="img/brand/marca-p-clean.svg" alt="miolo">
+    </div>
+    <div class="edge-meta__right">
+      <span>gastro</span>
+      <span>produto</span>
+      <span>stay</span>
+    </div>
+  </header>
+
+  <main class="stage">
+    <section class="strip-shell" aria-label="Selecao visual da miolo">
+      <div class="strip-rows" id="stripRows"></div>
+    </section>
+  </main>
+
+  <footer class="edge-meta edge-meta--bottom" aria-hidden="true">
+    <div class="edge-meta__left">salvador · bh · sp · rio · floripa</div>
+    <div class="edge-meta__center">(miolo)</div>
+    <div class="edge-meta__right">
+      <span class="edge-meta__bottom-note">explore feed<br>conteudo, imagem<br>e presenca.</span>
+      <span>about</span>
+      <span>index</span>
+    </div>
+  </footer>
 
   <script>
     (() => {
-      const wall = document.getElementById('photo-wall');
+      const stripRows = document.getElementById('stripRows');
 
-      const wallImages = [
-        'img/grid/20181111-Copa-Cozinha-00002.webp',
+      const stripImages = [
         'img/grid/20181111-Copa-Cozinha-00006.webp',
         'img/grid/20191009-Curamagoa-7941015.webp',
-        'img/grid/20191009-Curamagoa-7942031.webp',
-        'img/grid/20191204-Cozinha-da-Vo-Ana-0002.webp',
         'img/grid/20191204-Cozinha-da-Vo-Ana-0004.webp',
-        'img/grid/20200723-Forno-da-Saudade-0001.webp',
         'img/grid/20200723-Forno-da-Saudade-0011.webp',
         'img/grid/20210528-Capim-Rosa-4842.webp',
-        'img/grid/20210528-Capim-Rosa-4860.webp',
-        'img/grid/20210906-Tapecaria-Aveia-2148.webp',
-        'img/grid/20210906-Tapecaria-Aveia-2179.webp',
-        'img/grid/20211126-Capim-Rosa-2653.webp',
         'img/grid/20211126-Capim-Rosa-2656.webp',
         'img/grid/20220901-Enquanto0279.webp',
-        'img/grid/20220901-Enquanto0446.webp',
-        'img/grid/20230613-Juramento-202-2592.webp',
         'img/grid/20230613-Juramento-202-2626.webp',
-        'img/grid/20230807-Tapecaria-Aveia-3203.webp',
         'img/grid/20230807-Tapecaria-Aveia-3258.webp',
-        'img/grid/20231006-Distribuidora-Goitacazes-4504.webp',
         'img/grid/20231006-Distribuidora-Goitacazes-4529.webp',
-        'img/grid/20231207-Cozinha-Tupis-5842.webp',
         'img/grid/20231207-Cozinha-Tupis-5865.webp',
         'img/grid/20240228-Casinha-do-Jura.webp',
-        'img/grid/20240308-Oficina-Paraiso-8109.webp',
-        'img/grid/20240404-Juramento-202-8670.webp',
-        'img/grid/20240404-Juramento-202-8679.webp',
-        'img/grid/20240418-Tapecaria-Aveia-9762.webp',
         'img/grid/20240418-Tapecaria-Aveia-9927.webp',
         'img/grid/20240419-Guaramao-0383.webp',
         'img/grid/20240427-Copa-Cozinha-0800.webp',
-        'img/grid/20241106-Cozinha-Tupis-0556.webp',
-        'img/grid/20241106-Cozinha-Tupis-0612.webp',
-        'img/grid/20250627-Cozinha-Tupis-4226.webp',
-        'img/grid/20250627-Cozinha-Tupis-4327.webp',
-        'img/grid/20250627-Cozinha-Tupis-4349.webp',
-        'img/grid/20250724-Forno-da-Saudade-4992.webp',
         'img/grid/20250724-Forno-da-Saudade-5044.webp',
         'img/grid/20250918-Cafe-Nice-7921.webp',
-        'img/grid/20250918-Cafe-Nice-7928.webp',
-        'img/grid/20251009-Hacienda-1979-8301.webp',
         'img/grid/20251009-Hacienda-1979-8304.webp',
-        'img/grid/20251021-Cozinha-Tupis-8902.webp',
         'img/grid/20251021-Cozinha-Tupis-8971.webp',
-        'img/grid/20251114-Copa-Cozinha-0165.webp',
         'img/grid/20251114-Copa-Cozinha-0410.webp',
         'img/grid/Casa-Alvorada-0128.webp',
         'img/grid/enquanto_pochete_envelope_kraft_01.webp',
-        'img/grid/paodequeijo_bernardosilva_2024_001.webp',
-        'img/grid/paodequeijo_bernardosilva_2024_002.webp',
-        'img/grid/7941015.webp',
-        'img/grid/1985.webp'
+        'img/grid/paodequeijo_bernardosilva_2024_001.webp'
       ];
 
-      const layoutConfigs = [
-        {
-          breakpoint: 640,
-          columns: 10,
-          rows: 12,
-          gap: 6,
-          shapes: [
-            { columns: 2, rows: 3, orientation: 'vertical' },
-            { columns: 3, rows: 2, orientation: 'horizontal' }
-          ]
-        },
-        {
-          breakpoint: 1024,
-          columns: 16,
-          rows: 12,
-          gap: 7,
-          shapes: [
-            { columns: 3, rows: 4, orientation: 'vertical' },
-            { columns: 4, rows: 3, orientation: 'horizontal' }
-          ]
-        },
-        {
-          breakpoint: Infinity,
-          columns: 24,
-          rows: 12,
-          gap: 8,
-          shapes: [
-            { columns: 3, rows: 4, orientation: 'vertical' },
-            { columns: 4, rows: 3, orientation: 'horizontal' }
-          ]
-        }
-      ];
+      const gapValue = () => {
+        const value = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--lateral-gap'));
+        return Number.isFinite(value) ? value : 2;
+      };
+      let imageMeta = [];
+      let lastLayoutKey = '';
+      let lateralAnimationFrame = null;
+      let lateralVelocity = 0;
+      let lateralSegmentWidths = [];
+      let lateralOffsets = [];
+      let lateralRowTracks = [];
+      let lateralLoopBaseSegment = 4;
+      let isHoveringItem = false;
 
-      let lastConfigKey = '';
-
-      function shuffle(array) {
-        const copy = array.slice();
-
+      function shuffle(items) {
+        const copy = items.slice();
         for (let index = copy.length - 1; index > 0; index -= 1) {
           const randomIndex = Math.floor(Math.random() * (index + 1));
           [copy[index], copy[randomIndex]] = [copy[randomIndex], copy[index]];
         }
-
         return copy;
       }
 
+      function loadMeta(src) {
+        return new Promise((resolve, reject) => {
+          const image = new Image();
+          image.onload = () => resolve({
+            src,
+            width: image.naturalWidth,
+            height: image.naturalHeight,
+            ratio: image.naturalWidth / image.naturalHeight
+          });
+          image.onerror = reject;
+          image.src = src;
+        });
+      }
+
+      async function ensureMeta() {
+        if (imageMeta.length) return imageMeta;
+        const results = await Promise.allSettled(stripImages.map((src) => loadMeta(src)));
+        imageMeta = results
+          .filter((result) => result.status === 'fulfilled')
+          .map((result) => result.value);
+        return imageMeta;
+      }
+
       function getConfig() {
-        return layoutConfigs.find((config) => window.innerWidth <= config.breakpoint) || layoutConfigs[layoutConfigs.length - 1];
-      }
-
-      function getFirstEmptyCell(occupancy, columns, rows) {
-        for (let row = 0; row < rows; row += 1) {
-          for (let column = 0; column < columns; column += 1) {
-            if (!occupancy[row][column]) {
-              return { column, row };
-            }
-          }
+        if (window.innerWidth <= 640) {
+          return { mobile: true };
         }
 
-        return null;
+        return { mobile: false, segmentCopies: 9 };
       }
 
-      function shapeFits(occupancy, startColumn, startRow, shape, columns, rows) {
-        if (startColumn + shape.columns > columns || startRow + shape.rows > rows) {
-          return false;
+      function resetLateralState() {
+        if (lateralAnimationFrame) {
+          cancelAnimationFrame(lateralAnimationFrame);
+          lateralAnimationFrame = null;
         }
-
-        for (let row = startRow; row < startRow + shape.rows; row += 1) {
-          for (let column = startColumn; column < startColumn + shape.columns; column += 1) {
-            if (occupancy[row][column]) {
-              return false;
-            }
-          }
-        }
-
-        return true;
+        lateralVelocity = 0;
+        lateralSegmentWidths = [];
+        lateralOffsets = [];
+        lateralRowTracks = [];
       }
 
-      function markShape(occupancy, startColumn, startRow, shape) {
-        for (let row = startRow; row < startRow + shape.rows; row += 1) {
-          for (let column = startColumn; column < startColumn + shape.columns; column += 1) {
-            occupancy[row][column] = true;
-          }
-        }
-      }
-
-      function buildPlacements(config) {
-        const tileArea = config.shapes[0].columns * config.shapes[0].rows;
-        const itemCount = (config.columns * config.rows) / tileArea;
-        const maxAttempts = 400;
-
-        for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
-          const occupancy = Array.from({ length: config.rows }, () => Array(config.columns).fill(false));
-          const placements = [];
-          let failed = false;
-
-          while (placements.length < itemCount) {
-            const cell = getFirstEmptyCell(occupancy, config.columns, config.rows);
-
-            if (!cell) break;
-
-            const candidateShapes = shuffle(config.shapes).filter((shape) => (
-              shapeFits(occupancy, cell.column, cell.row, shape, config.columns, config.rows)
-            ));
-
-            if (!candidateShapes.length) {
-              failed = true;
-              break;
-            }
-
-            const shape = candidateShapes[0];
-            markShape(occupancy, cell.column, cell.row, shape);
-            placements.push({
-              column: cell.column,
-              row: cell.row,
-              columns: shape.columns,
-              rows: shape.rows,
-              orientation: shape.orientation
-            });
-          }
-
-          if (!failed && placements.length === itemCount) {
-            return shuffle(placements);
-          }
-        }
-
-        return [];
-      }
-
-      function createWallItem(imageSrc, placement, index) {
+      function createStripItem(imageData, index) {
         const figure = document.createElement('figure');
         const image = document.createElement('img');
 
-        figure.className = 'wall-item';
-        figure.style.gridColumn = `${placement.column + 1} / span ${placement.columns}`;
-        figure.style.gridRow = `${placement.row + 1} / span ${placement.rows}`;
-        figure.dataset.orientation = placement.orientation;
+        const tileHeight = stripRows.getBoundingClientRect().height || window.innerHeight * 0.25;
 
-        image.src = imageSrc;
+        figure.className = 'strip-item';
+        figure.style.setProperty('--item-width', `${imageData.ratio * tileHeight}px`);
+        image.src = imageData.src;
         image.alt = '';
         image.loading = index < 8 ? 'eager' : 'lazy';
         image.decoding = 'async';
-
         figure.appendChild(image);
         return figure;
       }
 
-      function renderWall() {
-        const config = getConfig();
-        const configKey = `${config.columns}x${config.rows}`;
+      function measureLateralSegments() {
+        if (window.innerWidth <= 640) return;
 
-        wall.style.setProperty('--gap', `${config.gap}px`);
-        wall.style.gridTemplateColumns = `repeat(${config.columns}, minmax(0, 1fr))`;
-        wall.style.gridTemplateRows = `repeat(${config.rows}, minmax(0, 1fr))`;
-
-        const placements = buildPlacements(config);
-        const chosenImages = shuffle(wallImages);
-        const fragment = document.createDocumentFragment();
-
-        wall.innerHTML = '';
-
-        placements.forEach((placement, index) => {
-          const imageSrc = chosenImages[index % chosenImages.length];
-          fragment.appendChild(createWallItem(imageSrc, placement, index));
+        lateralRowTracks = Array.from(stripRows.querySelectorAll('.lateral-row-track'));
+        lateralSegmentWidths = lateralRowTracks.map((rowTrack) => {
+          const segments = rowTrack.querySelectorAll('.lateral-segment');
+          if (segments.length < 2) return 0;
+          return segments[1].offsetLeft - segments[0].offsetLeft;
         });
+        lateralOffsets = lateralSegmentWidths.map((width, index) => {
+          const currentOffset = lateralOffsets[index];
+          return Number.isFinite(currentOffset) ? currentOffset : 0;
+        });
+        updateLateralTrackPosition();
+      }
 
-        wall.appendChild(fragment);
-        lastConfigKey = configKey;
+      function updateLateralTrackPosition() {
+        lateralRowTracks.forEach((rowTrack, index) => {
+          const segmentWidth = lateralSegmentWidths[index];
+          if (!segmentWidth) return;
+          const offset = lateralOffsets[index] || 0;
+          const wrappedOffset = ((offset % segmentWidth) + segmentWidth) % segmentWidth;
+          rowTrack.style.transform = `translate3d(${-(segmentWidth * lateralLoopBaseSegment) - wrappedOffset}px, 0, 0)`;
+        });
+      }
+
+      function runLateralScrollLoop() {
+        if (lateralAnimationFrame || window.innerWidth <= 640) return;
+
+        const step = () => {
+          if (Math.abs(lateralVelocity) < 0.05 || !lateralSegmentWidths.length) {
+            lateralAnimationFrame = null;
+            return;
+          }
+
+          lateralOffsets = lateralOffsets.map((offset) => offset + lateralVelocity);
+          updateLateralTrackPosition();
+          lateralAnimationFrame = requestAnimationFrame(step);
+        };
+
+        lateralAnimationFrame = requestAnimationFrame(step);
+      }
+
+      function stopLateralScrollLoop() {
+        if (!lateralAnimationFrame) return;
+        cancelAnimationFrame(lateralAnimationFrame);
+        lateralAnimationFrame = null;
+      }
+
+      function resetCenteredHover(rowTrack) {
+        const scope = rowTrack || stripRows;
+        scope.querySelectorAll('.strip-item').forEach((item) => {
+          item.style.transform = '';
+          item.style.zIndex = '';
+        });
+      }
+
+      function applyCenteredHover(item) {
+        const rowTrack = item.closest('.lateral-row-track');
+        if (!rowTrack) return;
+
+        const items = Array.from(rowTrack.querySelectorAll('.strip-item'));
+        const hoveredIndex = items.indexOf(item);
+        if (hoveredIndex === -1) return;
+
+        const hoverScale = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hover-scale')) || 1.5;
+        const itemWidth = item.getBoundingClientRect().width;
+        const offset = (itemWidth * (hoverScale - 1)) / 2;
+
+        resetCenteredHover(rowTrack);
+
+        items.forEach((currentItem, index) => {
+          if (index < hoveredIndex) {
+            currentItem.style.transform = `translate3d(${-offset}px, 0, 0)`;
+            currentItem.style.zIndex = '1';
+          } else if (index > hoveredIndex) {
+            currentItem.style.transform = `translate3d(${offset}px, 0, 0)`;
+            currentItem.style.zIndex = '1';
+          } else {
+            currentItem.style.transform = `scale(${hoverScale})`;
+            currentItem.style.zIndex = '3';
+          }
+        });
+      }
+
+      function bindCenteredHover() {
+        stripRows.querySelectorAll('.strip-item').forEach((item) => {
+          if (item.dataset.hoverBound === 'true') return;
+
+          item.addEventListener('mouseenter', () => {
+            if (window.innerWidth <= 640) return;
+            isHoveringItem = true;
+            lateralVelocity = 0;
+            stopLateralScrollLoop();
+            applyCenteredHover(item);
+          });
+
+          item.addEventListener('mouseleave', () => {
+            if (window.innerWidth <= 640) return;
+            isHoveringItem = false;
+            const rowTrack = item.closest('.lateral-row-track');
+            resetCenteredHover(rowTrack);
+          });
+
+          item.dataset.hoverBound = 'true';
+        });
+      }
+
+      function handleLateralMouseMove(event) {
+        if (window.innerWidth <= 640) return;
+        if (isHoveringItem) return;
+        const zoneWidth = Math.max(140, window.innerWidth * 0.16);
+        const maxSpeed = 32;
+        let velocity = 0;
+
+        if (event.clientX < zoneWidth) {
+          const strength = 1 - (event.clientX / zoneWidth);
+          velocity = -maxSpeed * strength;
+        } else if (event.clientX > window.innerWidth - zoneWidth) {
+          const strength = 1 - ((window.innerWidth - event.clientX) / zoneWidth);
+          velocity = maxSpeed * strength;
+        }
+
+        lateralVelocity = velocity;
+
+        if (velocity === 0) {
+          stopLateralScrollLoop();
+          return;
+        }
+
+        runLateralScrollLoop();
+      }
+
+      function handleLateralMouseLeave() {
+        isHoveringItem = false;
+        resetCenteredHover();
+        lateralVelocity = 0;
+        stopLateralScrollLoop();
+      }
+
+      function bindLateralScroll() {
+        document.removeEventListener('mousemove', handleLateralMouseMove);
+        document.removeEventListener('mouseleave', handleLateralMouseLeave);
+
+        if (window.innerWidth <= 640) {
+          lateralVelocity = 0;
+          stopLateralScrollLoop();
+          return;
+        }
+
+        document.addEventListener('mousemove', handleLateralMouseMove);
+        document.addEventListener('mouseleave', handleLateralMouseLeave);
+      }
+
+      async function renderStrip() {
+        const config = getConfig();
+        const layoutKey = `${window.innerWidth}x${window.innerHeight}:${config.mobile ? 'mobile' : 'lateral'}`;
+        const meta = await ensureMeta();
+        const visibleItems = shuffle(meta);
+        const fragment = document.createDocumentFragment();
+        resetLateralState();
+        stripRows.innerHTML = '';
+
+        if (config.mobile) {
+          visibleItems.forEach((imageData, index) => {
+            fragment.appendChild(createStripItem(imageData, index));
+          });
+          stripRows.appendChild(fragment);
+          bindLateralScroll();
+          lastLayoutKey = layoutKey;
+          return;
+        }
+
+        const lateralTrack = document.createElement('div');
+        lateralTrack.className = 'lateral-track';
+        const rowTrack = document.createElement('div');
+        rowTrack.className = 'lateral-row-track';
+
+        for (let segment = 0; segment < config.segmentCopies; segment += 1) {
+          const segmentEl = document.createElement('div');
+          segmentEl.className = 'lateral-segment';
+
+          visibleItems.forEach((imageData, index) => {
+            const clone = createStripItem(imageData, index);
+            clone.dataset.loopSegment = String(segment);
+            clone.dataset.loopRow = '0';
+            const cloneImage = clone.querySelector('img');
+            if (cloneImage) {
+              cloneImage.loading = 'eager';
+              cloneImage.addEventListener('load', measureLateralSegments, { once: true });
+              cloneImage.addEventListener('error', measureLateralSegments, { once: true });
+            }
+            segmentEl.appendChild(clone);
+          });
+
+          rowTrack.appendChild(segmentEl);
+        }
+
+        lateralTrack.appendChild(rowTrack);
+        fragment.appendChild(lateralTrack);
+
+        stripRows.appendChild(fragment);
+        requestAnimationFrame(() => {
+          requestAnimationFrame(measureLateralSegments);
+        });
+        bindLateralScroll();
+        bindCenteredHover();
+        lastLayoutKey = layoutKey;
       }
 
       let resizeFrame = 0;
@@ -331,16 +638,14 @@
       function handleResize() {
         cancelAnimationFrame(resizeFrame);
         resizeFrame = requestAnimationFrame(() => {
-          const nextConfig = getConfig();
-          const nextKey = `${nextConfig.columns}x${nextConfig.rows}`;
-
-          if (nextKey !== lastConfigKey) {
-            renderWall();
-          }
+          const config = getConfig();
+          const nextLayoutKey = `${window.innerWidth}x${window.innerHeight}:${config.mobile ? 'mobile' : 'lateral'}`;
+          if (nextLayoutKey === lastLayoutKey) return;
+          renderStrip();
         });
       }
 
-      renderWall();
+      renderStrip();
       window.addEventListener('resize', handleResize);
     })();
   </script>
