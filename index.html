@@ -27,6 +27,7 @@
       --muted: rgba(29, 29, 27, 0.72);
       --strip-gap: 2px;
       --outer-gutter: 12px;
+      --page-side-margin: 180px;
       --meta-size: 9px;
       --meta-track: 0.08em;
       --edge-band: 42px;
@@ -142,16 +143,18 @@
     }
 
     .strip-shell {
-      width: 100vw;
+      width: calc(100vw - (var(--page-side-margin) * 2));
       min-height: calc(100vh - (var(--edge-band) * 2));
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: visible;
+      clip-path: inset(-100vh 0 -100vh 0);
     }
 
     .strip-rows {
       position: relative;
-      width: 100vw;
+      width: 100%;
       height: var(--lateral-tile-size);
       overflow: visible;
       cursor: ew-resize;
@@ -224,6 +227,7 @@
     @media (max-width: 960px) {
       :root {
         --outer-gutter: 10px;
+        --page-side-margin: 14px;
         --edge-band: 40px;
         --lateral-gap: 0px;
       }
@@ -241,6 +245,7 @@
     @media (max-width: 640px) {
       :root {
         --outer-gutter: 8px;
+        --page-side-margin: 10px;
         --meta-size: 8px;
         --edge-band: 34px;
         --lateral-gap: 0px;
