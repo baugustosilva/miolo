@@ -224,6 +224,43 @@
       filter: grayscale(0) brightness(1) contrast(1);
     }
 
+    .hover-title {
+      position: fixed;
+      z-index: 8;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      pointer-events: none;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+      opacity: 0;
+      transform: translate3d(-50%, 8px, 0);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      text-align: center;
+      overflow: visible;
+    }
+
+    .hover-title__char,
+    .hover-title__space {
+      display: inline-flex;
+      justify-content: center;
+      flex: 0 0 auto;
+    }
+
+    .hover-title__space {
+      width: 1.2em;
+    }
+
+    .hover-title.is-visible {
+      opacity: 1;
+      transform: translate3d(-50%, 0, 0);
+    }
+
     @media (max-width: 960px) {
       :root {
         --outer-gutter: 10px;
@@ -305,6 +342,7 @@
     <section class="strip-shell" aria-label="Selecao visual da miolo">
       <div class="strip-rows" id="stripRows"></div>
     </section>
+    <div class="hover-title" id="hoverTitle" aria-hidden="true"></div>
   </main>
 
   <footer class="edge-meta edge-meta--bottom" aria-hidden="true">
@@ -320,6 +358,7 @@
   <script>
     (() => {
       const stripRows = document.getElementById('stripRows');
+      const hoverTitle = document.getElementById('hoverTitle');
 
       const stripImages = [
         'img/grid/20181111-Copa-Cozinha-00006.webp',
@@ -347,6 +386,32 @@
         'img/grid/paodequeijo_bernardosilva_2024_001.webp'
       ];
 
+      const imageTitles = {
+        '20181111-Copa-Cozinha-00006.webp': 'Copa Cozinha',
+        '20191009-Curamagoa-7941015.webp': 'Curamágoa',
+        '20191204-Cozinha-da-Vo-Ana-0004.webp': 'Cozinha da Vó Ana',
+        '20200723-Forno-da-Saudade-0011.webp': 'Forno da Saudade',
+        '20210528-Capim-Rosa-4842.webp': 'Capim Rosa',
+        '20211126-Capim-Rosa-2656.webp': 'Capim Rosa',
+        '20220901-Enquanto0279.webp': 'Enquanto',
+        '20230613-Juramento-202-2626.webp': 'Juramento 202',
+        '20230807-Tapecaria-Aveia-3258.webp': 'Tapeçaria Aveia',
+        '20231006-Distribuidora-Goitacazes-4529.webp': 'Distribuidora Goitacazes',
+        '20231207-Cozinha-Tupis-5865.webp': 'Cozinha Tupis',
+        '20240228-Casinha-do-Jura.webp': 'Casinha do Jura',
+        '20240418-Tapecaria-Aveia-9927.webp': 'Tapeçaria Aveia',
+        '20240419-Guaramao-0383.webp': 'Guaramão',
+        '20240427-Copa-Cozinha-0800.webp': 'Copa Cozinha',
+        '20250724-Forno-da-Saudade-5044.webp': 'Forno da Saudade',
+        '20250918-Cafe-Nice-7921.webp': 'Café Nice',
+        '20251009-Hacienda-1979-8304.webp': 'Hacienda 1979',
+        '20251021-Cozinha-Tupis-8971.webp': 'Cozinha Tupis',
+        '20251114-Copa-Cozinha-0410.webp': 'Copa Cozinha',
+        'Casa-Alvorada-0128.webp': 'Casa Alvorada',
+        'enquanto_pochete_envelope_kraft_01.webp': 'Enquanto',
+        'paodequeijo_bernardosilva_2024_001.webp': 'Pão de Queijo'
+      };
+
       const gapValue = () => {
         const value = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--lateral-gap'));
         return Number.isFinite(value) ? value : 2;
@@ -360,6 +425,70 @@
       let lateralRowTracks = [];
       let lateralLoopBaseSegment = 4;
       let isHoveringItem = false;
+
+      function getImageFileName(src) {
+        return src.split('/').pop();
+      }
+
+      function getImageTitle(src) {
+        return imageTitles[getImageFileName(src)] || '';
+      }
+
+      function renderTitle(title) {
+        hoverTitle.replaceChildren();
+        title.toLocaleUpperCase('pt-BR').split('').forEach((char) => {
+          const span = document.createElement('span');
+          span.className = char === ' ' ? 'hover-title__space' : 'hover-title__char';
+          span.textContent = char === ' ' ? '' : char;
+          hoverTitle.appendChild(span);
+        });
+      }
+
+      function hideHoverTitle() {
+        if (!hoverTitle) return;
+        hoverTitle.classList.remove('is-visible');
+      }
+
+      function getItemLayoutRect(item) {
+        const rowTrack = item.closest('.lateral-row-track');
+        if (!rowTrack) return item.getBoundingClientRect();
+
+        const stripRect = stripRows.getBoundingClientRect();
+        const rowMatrix = new DOMMatrixReadOnly(getComputedStyle(rowTrack).transform);
+        return {
+          left: stripRect.left + rowTrack.offsetLeft + rowMatrix.m41 + item.offsetLeft,
+          top: stripRect.top + rowTrack.offsetTop + rowMatrix.m42 + item.offsetTop,
+          width: item.offsetWidth,
+          height: item.offsetHeight
+        };
+      }
+
+      function showHoverTitle(item, metrics = null) {
+        if (!hoverTitle) return;
+
+        const title = getImageTitle(item.dataset.imageSrc || '');
+        if (!title) {
+          hideHoverTitle();
+          return;
+        }
+
+        const hoverScale = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hover-scale')) || 1.5;
+        const rect = metrics || item.getBoundingClientRect();
+        const scaledTop = rect.top - ((rect.height * (hoverScale - 1)) / 2);
+        const scaledBottom = rect.top + rect.height + ((rect.height * (hoverScale - 1)) / 2);
+        const centerX = rect.left + (rect.width / 2);
+        const titleWidth = rect.width * hoverScale;
+        const placement = item.dataset.titlePlacement || 'top';
+        const top = placement === 'bottom'
+          ? Math.min(window.innerHeight - 74, scaledBottom + 13)
+          : Math.max(74, scaledTop - 24);
+
+        renderTitle(title);
+        hoverTitle.style.left = `${centerX}px`;
+        hoverTitle.style.width = `${titleWidth}px`;
+        hoverTitle.style.top = `${top}px`;
+        hoverTitle.classList.add('is-visible');
+      }
 
       function shuffle(items) {
         const copy = items.slice();
@@ -420,6 +549,7 @@
 
         figure.className = 'strip-item';
         figure.style.setProperty('--item-width', `${imageData.ratio * tileHeight}px`);
+        figure.dataset.imageSrc = imageData.src;
         image.src = imageData.src;
         image.alt = '';
         image.loading = index < 8 ? 'eager' : 'lazy';
@@ -493,11 +623,12 @@
         const hoveredIndex = items.indexOf(item);
         if (hoveredIndex === -1) return;
 
-        const hoverScale = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hover-scale')) || 1.5;
-        const itemWidth = item.getBoundingClientRect().width;
-        const offset = (itemWidth * (hoverScale - 1)) / 2;
-
         resetCenteredHover(rowTrack);
+
+        const hoverScale = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hover-scale')) || 1.5;
+        const itemRect = getItemLayoutRect(item);
+        const itemWidth = itemRect.width;
+        const offset = (itemWidth * (hoverScale - 1)) / 2;
 
         items.forEach((currentItem, index) => {
           if (index < hoveredIndex) {
@@ -511,6 +642,8 @@
             currentItem.style.zIndex = '3';
           }
         });
+
+        showHoverTitle(item, itemRect);
       }
 
       function bindCenteredHover() {
@@ -522,6 +655,7 @@
             isHoveringItem = true;
             lateralVelocity = 0;
             stopLateralScrollLoop();
+            item.dataset.titlePlacement = Math.random() < 0.5 ? 'top' : 'bottom';
             applyCenteredHover(item);
           });
 
@@ -530,6 +664,7 @@
             isHoveringItem = false;
             const rowTrack = item.closest('.lateral-row-track');
             resetCenteredHover(rowTrack);
+            hideHoverTitle();
           });
 
           item.dataset.hoverBound = 'true';
@@ -564,6 +699,7 @@
       function handleLateralMouseLeave() {
         isHoveringItem = false;
         resetCenteredHover();
+        hideHoverTitle();
         lateralVelocity = 0;
         stopLateralScrollLoop();
       }
