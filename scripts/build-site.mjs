@@ -443,7 +443,7 @@ function layout({ relativeRoot, current, title, description, canonical, image, b
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="index,follow">
 ${getPageMeta({ title, description, canonical, image })}
-  <link rel="icon" type="image/svg+xml" href="${relativeRoot}img/brand/miolo-symbol.svg">
+  <link rel="icon" type="image/svg+xml" href="${relativeRoot}img/brand/miolo-favicon.svg">
   <link rel="stylesheet" href="${relativeRoot}assets/css/site.css">
 </head>
 <body class="${bodyClass}">

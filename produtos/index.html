@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index,follow">
+  <title>miolo - produtos</title>
+  <meta name="description" content="Conteudo visual para produtos. Ensaios, campanhas e objetos em uma leitura editorial da Miolo.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="miolo">
+  <meta property="og:title" content="miolo - produtos">
+  <meta property="og:description" content="Conteudo visual para produtos. Ensaios, campanhas e objetos em uma leitura editorial da Miolo.">
+  <meta property="og:url" content="https://miolo.online/produtos/">
+  <meta property="og:image" content="https://miolo.online/img/grid/20210528-Capim-Rosa-4860.webp">
+  <meta property="og:image:alt" content="Miolo produtos">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="miolo - produtos">
+  <meta name="twitter:description" content="Conteudo visual para produtos. Ensaios, campanhas e objetos em uma leitura editorial da Miolo.">
+  <meta name="twitter:image" content="https://miolo.online/img/grid/20210528-Capim-Rosa-4860.webp">
+  <link rel="icon" type="image/svg+xml" href="../img/brand/miolo-favicon.svg">
+  <link rel="stylesheet" href="../assets/css/category-strip-page.css">
+</head>
+<body data-category="produto" data-category-title="produtos">
+  <header class="edge-meta edge-meta--top">
+    <nav class="edge-meta__left" aria-label="Navegação institucional">
+      <button id="nav-about-btn" type="button" aria-label="Abrir sobre">about</button>
+      <button id="nav-close-btn" type="button" aria-label="Fechar sobre">close</button>
+    </nav>
+    <div class="edge-meta__center">
+      <a class="edge-meta__home" href="../index.html" aria-label="Ir para a home da Miolo">
+        <img class="edge-meta__brand" src="../img/brand/marca-p-clean.svg" alt="miolo">
+      </a>
+    </div>
+    <nav class="edge-meta__right" aria-label="Navegação por categorias">
+      <a href="../gastro/index.html">gastro</a>
+      <a href="../produtos/index.html" aria-current="page">produtos</a>
+      <a href="#acervos">acervos</a>
+    </nav>
+  </header>
+
+  <main class="stage">
+    <section class="strip-shell" aria-label="Selecao visual de produtos da miolo">
+      <div class="strip-rows" id="stripRows"></div>
+    </section>
+    <div class="hover-title" id="hoverTitle" aria-hidden="true"></div>
+  </main>
+
+  <footer class="edge-meta edge-meta--bottom" aria-hidden="true">
+    <div class="edge-meta__left"></div>
+    <div class="edge-meta__center">salvador · bh · sp · rio · floripa</div>
+    <div class="edge-meta__right">
+      <span class="edge-meta__bottom-note">explore.<br>conteudo, imagem<br>e presenca.</span>
+    </div>
+  </footer>
+
+  <div id="about-overlay" role="dialog" aria-modal="true" aria-label="Sobre">
+    <div id="about-text">
+      <p>interessam à miolo a textura dos alimentos, as sombras, os espaços, o gesto de quem faz e a presença concreta das coisas.</p>
+      <p>temos apreço pela superfície dos objetos e por aquilo que permanece real antes de virar campanha, cardápio, site ou publicação.</p>
+      <p>miolo é um estúdio de conteúdo visual para gastronomia, produto, acervo, hospitalidade e outros projetos que carregam beleza, matéria e verdade.</p>
+      <p>a miolo nasce da prática de Bernardo Silva, fotógrafo com mais de dez anos de experiência e uma pesquisa visual atravessada pela fotografia analógica, pelos processos manuais da imagem e por uma atenção precisa à luz, ao tempo e à matéria.</p>
+      <p>entre o olhar autoral e a necessidade comercial, criamos imagens para marcas, restaurantes, cafés, hotéis, produtos e projetos que precisam construir presença sem perder densidade.</p>
+      <p class="about-contact"><span class="about-contact-label">para projetos, conversas e orçamentos:</span><br><a href="mailto:baugustosilva@gmail.com">baugustosilva@gmail.com</a><span class="contact-separator">/</span><a href="https://wa.me/5531992484394" target="_blank" rel="noreferrer noopener">+55 31 992-484-394</a><span class="contact-separator">/</span><a href="https://instagram.com/miolo.archive" target="_blank" rel="noreferrer noopener">@miolo.archive</a></p>
+    </div>
+  </div>
+
+  <div id="home-lightbox" role="dialog" aria-modal="true" aria-label="Galeria de ensaio">
+    <button id="home-lightbox-close" type="button" aria-label="Fechar galeria">close</button>
+    <button id="home-lightbox-prev" type="button" aria-label="Imagem anterior">‹</button>
+    <div class="home-lightbox__track" id="home-lightbox-track">
+      <img id="home-lightbox-prev-preview" class="home-lightbox__side-image" src="" alt="" aria-hidden="true">
+      <div class="home-lightbox__main">
+        <img id="home-lightbox-img" src="" alt="">
+        <div id="home-lightbox-caption" aria-hidden="true"></div>
+      </div>
+      <img id="home-lightbox-next-preview" class="home-lightbox__side-image" src="" alt="" aria-hidden="true">
+    </div>
+    <button id="home-lightbox-next" type="button" aria-label="Próxima imagem">›</button>
+  </div>
+
+  <script src="../assets/js/site-data.js"></script>
+  <script src="../assets/js/category-strip-page.js"></script>
+</body>
+</html>
