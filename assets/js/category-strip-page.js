@@ -378,11 +378,14 @@
 
   async function ensureMeta() {
     if (imageMeta.length) return imageMeta;
-    const results = await Promise.allSettled(
-      stripImageEntries.map((entry) => loadMeta(entry.src, entry.essay))
-    );
-    results.forEach((result) => {
-      if (result.status === "fulfilled") imageMeta.push(result.value);
+    stripImageEntries.forEach((entry) => {
+      imageMeta.push({
+        src: entry.src,
+        essay: entry.essay,
+        width: 1,
+        height: 1,
+        ratio: 1
+      });
     });
     return imageMeta;
   }
@@ -420,6 +423,22 @@
     image.alt = "";
     image.loading = index < 8 ? "eager" : "lazy";
     image.decoding = "async";
+
+    const updateItemWidth = () => {
+      if (!image.naturalWidth || !image.naturalHeight) return;
+      const currentHeight = figure.getBoundingClientRect().height || rowHeight;
+      const ratio = image.naturalWidth / image.naturalHeight;
+      if (!Number.isFinite(ratio) || !currentHeight) return;
+      figure.style.setProperty("--item-width", `${ratio * currentHeight}px`);
+      if (window.innerWidth > 640) requestAnimationFrame(measureLateralSegments);
+    };
+
+    if (image.complete) {
+      updateItemWidth();
+    } else {
+      image.addEventListener("load", updateItemWidth, { once: true });
+    }
+
     figure.appendChild(image);
     figure.addEventListener("click", () => openLightbox(figure));
     figure.addEventListener("keydown", (event) => {
