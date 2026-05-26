@@ -429,6 +429,7 @@
       const currentHeight = figure.getBoundingClientRect().height || rowHeight;
       const ratio = image.naturalWidth / image.naturalHeight;
       if (!Number.isFinite(ratio) || !currentHeight) return;
+      figure.style.setProperty("--item-ratio", `${image.naturalWidth} / ${image.naturalHeight}`);
       figure.style.setProperty("--item-width", `${ratio * currentHeight}px`);
       if (window.innerWidth > 640) requestAnimationFrame(measureLateralSegments);
     };

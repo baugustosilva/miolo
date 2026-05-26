@@ -785,12 +785,14 @@
       .strip-item {
         width: 100%;
         height: auto;
+        aspect-ratio: var(--item-ratio, 4 / 5);
         margin-bottom: 20px;
       }
 
       .strip-item img {
         width: 100%;
-        height: auto;
+        height: 100%;
+        object-fit: contain;
       }
 
       #home-lightbox {
@@ -1406,6 +1408,7 @@
           const currentHeight = figure.getBoundingClientRect().height || tileHeight;
           const ratio = image.naturalWidth / image.naturalHeight;
           if (!Number.isFinite(ratio) || !currentHeight) return;
+          figure.style.setProperty('--item-ratio', `${image.naturalWidth} / ${image.naturalHeight}`);
           figure.style.setProperty('--item-width', `${ratio * currentHeight}px`);
           if (window.innerWidth > 640) requestAnimationFrame(measureLateralSegments);
         };
