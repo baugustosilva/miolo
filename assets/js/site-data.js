@@ -212,11 +212,10 @@ window.MIOLO_DATA = {
       "gridCover": "20210906-Tapecaria-Aveia-2148.webp",
       "blurb": "fibra, materia e detalhe",
       "categoryTitle": "produto",
-      "coverSrc": "img/20210906-Tapecaria-Aveia/20210906 - Tapeçaria Aveia2148.jpg",
+      "coverSrc": "img/20210906-Tapecaria-Aveia/20210906-Tapecaria-Aveia-2148.webp",
       "heroSrc": "img/grid/20210906-Tapecaria-Aveia-2148.webp",
-      "imageCount": 11,
+      "imageCount": 10,
       "images": [
-        "img/20210906-Tapecaria-Aveia/20210906 - Tapeçaria Aveia2148.jpg",
         "img/20210906-Tapecaria-Aveia/20210906-Tapecaria-Aveia-2148.webp",
         "img/20210906-Tapecaria-Aveia/20210906-Tapecaria-Aveia-2153.webp",
         "img/20210906-Tapecaria-Aveia/20210906-Tapecaria-Aveia-2172.webp",

@@ -266,8 +266,9 @@
     lightboxProxy = null;
     proxy.addEventListener("transitionend", (event) => {
       if (event.target === proxy && event.propertyName === "opacity") proxy.remove();
-    }, { once: true });
+    });
     proxy.classList.add("is-fading");
+    window.setTimeout(() => proxy.remove(), 900);
   }
 
   function animateLightboxOpen(item, sourceRect, sourceSrc) {

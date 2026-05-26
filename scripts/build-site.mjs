@@ -326,7 +326,7 @@ function readImages(folder) {
   const target = path.join(imgDir, folder);
   return fs
     .readdirSync(target)
-    .filter((file) => /\.(webp|jpg|jpeg|png)$/i.test(file))
+    .filter((file) => /\.webp$/i.test(file))
     .filter((file) => !file.endsWith("-cover.webp"))
     .filter((file) => !file.startsWith("."))
     .sort((left, right) => left.localeCompare(right, "pt-BR", { numeric: true }));
