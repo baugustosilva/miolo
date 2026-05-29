@@ -4,6 +4,8 @@ import path from "node:path";
 const root = "/Users/baugustosilva/Documents/New project/miolo";
 const imgDir = path.join(root, "img");
 const outputDataFile = path.join(root, "assets/js/site-data.js");
+const socialImage = "https://miolo.online/img/brand/miolo-og.jpg";
+const socialImageAlt = "miolo - conteudo visual para gastronomia, produto e hospitalidade";
 
 const site = {
   name: "miolo",
@@ -378,7 +380,17 @@ const dataPayload = {
   }))
 };
 
-function getPageMeta({ title, description, canonical, image }) {
+function getPageMeta({ title, description, canonical, image, imageAlt, imageWidth, imageHeight, imageType }) {
+  const imageMeta = [
+    `  <meta property="og:image" content="${escapeHtml(image)}">`,
+    imageWidth ? `  <meta property="og:image:width" content="${escapeHtml(String(imageWidth))}">` : "",
+    imageHeight ? `  <meta property="og:image:height" content="${escapeHtml(String(imageHeight))}">` : "",
+    imageAlt ? `  <meta property="og:image:alt" content="${escapeHtml(imageAlt)}">` : "",
+    imageType ? `  <meta property="og:image:type" content="${escapeHtml(imageType)}">` : ""
+  ]
+    .filter(Boolean)
+    .join("\n");
+
   return `  <title>${escapeHtml(title)}</title>
   <meta name="description" content="${escapeHtml(description)}">
   <meta property="og:type" content="website">
@@ -386,7 +398,7 @@ function getPageMeta({ title, description, canonical, image }) {
   <meta property="og:title" content="${escapeHtml(title)}">
   <meta property="og:description" content="${escapeHtml(description)}">
   <meta property="og:url" content="${escapeHtml(canonical)}">
-  <meta property="og:image" content="${escapeHtml(image)}">
+${imageMeta}
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${escapeHtml(title)}">
   <meta name="twitter:description" content="${escapeHtml(description)}">
@@ -435,14 +447,14 @@ function footer(relativeRoot, current) {
   </footer>`;
 }
 
-function layout({ relativeRoot, current, title, description, canonical, image, bodyClass = "", main }) {
+function layout({ relativeRoot, current, title, description, canonical, image, imageAlt, imageWidth, imageHeight, imageType, bodyClass = "", main }) {
   return `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="index,follow">
-${getPageMeta({ title, description, canonical, image })}
+${getPageMeta({ title, description, canonical, image, imageAlt, imageWidth, imageHeight, imageType })}
   <link rel="icon" type="image/svg+xml" href="${relativeRoot}img/brand/miolo-favicon.svg">
   <link rel="stylesheet" href="${relativeRoot}assets/css/site.css">
 </head>
@@ -540,7 +552,11 @@ function buildCategoryIndex() {
     title: "miolo - index",
     description: site.description,
     canonical: "https://miolo.online/categorias/",
-    image: "https://miolo.online/img/brand/miolo-lockup.svg",
+    image: socialImage,
+    imageAlt: socialImageAlt,
+    imageWidth: 1200,
+    imageHeight: 630,
+    imageType: "image/jpeg",
     main
   });
 }
@@ -620,7 +636,11 @@ function buildAbout() {
     title: "miolo - sobre",
     description: site.description,
     canonical: "https://miolo.online/about/",
-    image: "https://miolo.online/img/brand/miolo-lockup.svg",
+    image: socialImage,
+    imageAlt: socialImageAlt,
+    imageWidth: 1200,
+    imageHeight: 630,
+    imageType: "image/jpeg",
     main
   });
 }
