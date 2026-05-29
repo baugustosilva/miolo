@@ -10,8 +10,8 @@ window.MIOLO_DATA = {
       "email": "baugustosilva@gmail.com",
       "whatsappLabel": "+55 31 992-484-394",
       "whatsappHref": "https://wa.me/5531992484394",
-      "instagramLabel": "@bbbernardo.silva",
-      "instagramHref": "https://instagram.com/bbbernardo.silva"
+      "instagramLabel": "@miolo.archive",
+      "instagramHref": "https://instagram.com/miolo.archive"
     },
     "services": [
       {

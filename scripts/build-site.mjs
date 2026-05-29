@@ -21,8 +21,8 @@ const site = {
     email: "baugustosilva@gmail.com",
     whatsappLabel: "+55 31 992-484-394",
     whatsappHref: "https://wa.me/5531992484394",
-    instagramLabel: "@bbbernardo.silva",
-    instagramHref: "https://instagram.com/bbbernardo.silva"
+    instagramLabel: "@miolo.archive",
+    instagramHref: "https://instagram.com/miolo.archive"
   },
   services: [
     {
@@ -411,7 +411,7 @@ function nav(relativeRoot, current) {
     { href: `${relativeRoot}categorias/gastronomia/index.html`, label: "gastronomia", key: "gastronomia" },
     { href: `${relativeRoot}categorias/produto/index.html`, label: "produto", key: "produto" },
     { href: `${relativeRoot}about/index.html`, label: "sobre", key: "sobre" },
-    { href: `${relativeRoot}about/index.html#contato`, label: "contato", key: "contato" }
+    { href: `${relativeRoot}contato/index.html`, label: "contato", key: "contato" }
   ];
 
   return items
@@ -645,6 +645,67 @@ function buildAbout() {
   });
 }
 
+function buildContact() {
+  const main = `<main class="page-main contact-page">
+    <section class="contact-hero">
+      <div class="contact-hero__inner">
+        <div class="page-hero__eyebrow">contato</div>
+        <h1 class="contact-hero__title">vamos conversar.</h1>
+        <p class="contact-hero__text">Projetos, orçamentos, bancos de imagem e produções recorrentes para gastronomia, produto e hospitalidade.</p>
+      </div>
+    </section>
+
+    <section class="contact-section">
+      <div class="contact-section__inner">
+        <form class="contact-form" data-whatsapp-form data-whatsapp-phone="5531992484394">
+          <label class="contact-field">
+            <span>nome *</span>
+            <input type="text" name="nome" autocomplete="name" required>
+          </label>
+          <label class="contact-field">
+            <span>telefone *</span>
+            <input type="tel" name="telefone" autocomplete="tel" required>
+          </label>
+          <label class="contact-field contact-field--wide">
+            <span>sobre *</span>
+            <textarea name="sobre" rows="5" required></textarea>
+          </label>
+          <label class="contact-field">
+            <span>data</span>
+            <input type="text" name="data" autocomplete="off">
+          </label>
+          <label class="contact-field">
+            <span>email *</span>
+            <input type="email" name="email" autocomplete="email" required>
+          </label>
+          <div class="contact-actions">
+            <button class="contact-submit" type="submit">enviar.</button>
+          </div>
+        </form>
+
+        <div class="contact-map" aria-label="Territorios de atuacao da Miolo">
+          <iframe title="Mapa de atuacao da Miolo" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.openstreetmap.org/export/embed.html?bbox=-74.0%2C-34.0%2C-34.0%2C6.0&amp;layer=mapnik&amp;marker=-12.9714%2C-38.5014"></iframe>
+          <div class="contact-locations">salvador · bh · sp · rio · floripa</div>
+        </div>
+      </div>
+    </section>
+  </main>`;
+
+  return layout({
+    relativeRoot: "../",
+    current: "contato",
+    title: "miolo - contato",
+    description: "Contato da Miolo para projetos, orçamentos e colaborações.",
+    canonical: "https://miolo.online/contato/",
+    image: socialImage,
+    imageAlt: socialImageAlt,
+    imageWidth: 1200,
+    imageHeight: 630,
+    imageType: "image/jpeg",
+    main
+  });
+}
+
 function buildEssay(essay) {
   const category = site.categories[essay.category];
   const gallery = essay.images
@@ -697,6 +758,7 @@ for (const category of publicCategories) {
 
 writeFile(path.join(root, "categorias", "index.html"), buildCategoryIndex());
 writeFile(path.join(root, "about", "index.html"), buildAbout());
+writeFile(path.join(root, "contato", "index.html"), buildContact());
 
 for (const essay of essays) {
   writeFile(path.join(root, "ensaios", essay.slug, "index.html"), buildEssay(essay));
