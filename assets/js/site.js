@@ -112,36 +112,6 @@
     });
   }
 
-  function bindWhatsappForms() {
-    const forms = document.querySelectorAll("[data-whatsapp-form]");
-    if (!forms.length) return;
-
-    forms.forEach((form) => {
-      form.addEventListener("submit", (event) => {
-        event.preventDefault();
-
-        if (!form.reportValidity()) return;
-
-        const data = new FormData(form);
-        const message = [
-          "oi, miolo. quero conversar sobre um projeto.",
-          "",
-          `nome: ${data.get("nome") || ""}`,
-          `telefone: ${data.get("telefone") || ""}`,
-          `email: ${data.get("email") || ""}`,
-          `data: ${data.get("data") || ""}`,
-          "",
-          `sobre: ${data.get("sobre") || ""}`
-        ].join("\n");
-
-        const phone = form.dataset.whatsappPhone || "";
-        const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-        window.open(url, "_blank", "noopener");
-      });
-    });
-  }
-
   renderHeroStrip();
   bindLightbox();
-  bindWhatsappForms();
 })();
