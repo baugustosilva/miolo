@@ -19,8 +19,8 @@ const site = {
     "Direcao criativa e fotografia por Bernardo Silva. A experiencia autoral do portfólio original continua presente, mas agora a apresentação responde como estúdio.",
   contact: {
     email: "baugustosilva@gmail.com",
-    whatsappLabel: "+55 31 992-484-394",
-    whatsappHref: "https://wa.me/5531992484394",
+    whatsappLabel: "+55 71 999-285-690",
+    whatsappHref: "https://wa.me/5571999285690",
     instagramLabel: "@miolo.archive",
     instagramHref: "https://instagram.com/miolo.archive"
   },
@@ -407,10 +407,10 @@ ${imageMeta}
 
 function nav(relativeRoot, current) {
   const items = [
-    { href: `${relativeRoot}index.html`, label: "home", key: "home" },
-    { href: `${relativeRoot}categorias/gastronomia/index.html`, label: "gastronomia", key: "gastronomia" },
-    { href: `${relativeRoot}categorias/produto/index.html`, label: "produto", key: "produto" },
-    { href: `${relativeRoot}about/index.html`, label: "sobre", key: "sobre" }
+    { href: `${relativeRoot}`, label: "home", key: "home" },
+    { href: `${relativeRoot}categorias/gastronomia/`, label: "gastronomia", key: "gastronomia" },
+    { href: `${relativeRoot}categorias/produto/`, label: "produto", key: "produto" },
+    { href: `${relativeRoot}about/`, label: "sobre", key: "sobre" }
   ];
 
   return items
@@ -421,7 +421,7 @@ function nav(relativeRoot, current) {
 function header(relativeRoot, current) {
   return `<header class="site-header">
     <div class="site-header__inner">
-      <a class="site-brand" href="${relativeRoot}index.html" aria-label="Miolo home">
+      <a class="site-brand" href="${relativeRoot}" aria-label="Miolo home">
         <img src="${relativeRoot}img/brand/marca-p-clean.svg" alt="miolo">
         <span class="site-brand__meta">conteudo visual<br>para gastronomia e produto</span>
       </a>
@@ -469,12 +469,12 @@ ${getPageMeta({ title, description, canonical, image, imageAlt, imageWidth, imag
 
 function essayCard(essay, relativeRoot) {
   return `<article class="essay-card">
-    <a class="essay-card__cover" href="${relativeRoot}ensaios/${essay.slug}/index.html">
+    <a class="essay-card__cover" href="${relativeRoot}ensaios/${essay.slug}/">
       <img src="${relativeRoot}${essay.coverSrc}" alt="${escapeHtml(essay.title)} ${essay.year}">
     </a>
     <div class="essay-card__body">
       <div class="essay-card__meta">${essay.categoryTitle} · ${essay.year} · ${essay.imageCount} imagens</div>
-      <h3 class="essay-card__title"><a href="${relativeRoot}ensaios/${essay.slug}/index.html">${essay.title}</a></h3>
+      <h3 class="essay-card__title"><a href="${relativeRoot}ensaios/${essay.slug}/">${essay.title}</a></h3>
       <p class="essay-card__description">${essay.blurb}</p>
     </div>
   </article>`;
@@ -518,11 +518,11 @@ function buildCategoryIndex() {
     .map((category) => {
       const featuredEssay = essays.find((essay) => essay.category === category.slug);
       return `<article class="category-card">
-        <a class="category-card__cover" href="../categorias/${category.slug}/index.html">
+        <a class="category-card__cover" href="../categorias/${category.slug}/">
           <img src="../${featuredEssay.coverSrc}" alt="${escapeHtml(category.title)}">
         </a>
         <div class="category-card__meta">${category.essayCount} ensaios disponiveis</div>
-        <h2 class="category-card__title"><a href="../categorias/${category.slug}/index.html">${category.title}</a></h2>
+        <h2 class="category-card__title"><a href="../categorias/${category.slug}/">${category.title}</a></h2>
         <p class="category-card__description">${category.description}</p>
       </article>`;
     })
@@ -660,7 +660,7 @@ function buildEssay(essay) {
         <div class="page-hero__eyebrow">${category.title} · ${essay.year}</div>
         <h1 class="essay-hero__title">${essay.title}</h1>
         <p class="essay-hero__text">${essay.blurb}. ${essay.imageCount} imagens organizadas em um ensaio completo, com entrada direta para contato e leitura clara do projeto.</p>
-        <div class="essay-meta"><a href="../../categorias/${essay.category}/index.html">${category.title}</a> · ${essay.year} · ${essay.imageCount} imagens</div>
+        <div class="essay-meta"><a href="../../categorias/${essay.category}/">${category.title}</a> · ${essay.year} · ${essay.imageCount} imagens</div>
         <div class="essay-hero__cover">
           <img src="../../${essay.coverSrc}" alt="${escapeHtml(essay.title)} ${essay.year}">
         </div>

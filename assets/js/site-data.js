@@ -8,8 +8,8 @@ window.MIOLO_DATA = {
     "founder": "Direcao criativa e fotografia por Bernardo Silva. A experiencia autoral do portfólio original continua presente, mas agora a apresentação responde como estúdio.",
     "contact": {
       "email": "baugustosilva@gmail.com",
-      "whatsappLabel": "+55 31 992-484-394",
-      "whatsappHref": "https://wa.me/5531992484394",
+      "whatsappLabel": "+55 71 999-285-690",
+      "whatsappHref": "https://wa.me/5571999285690",
       "instagramLabel": "@miolo.archive",
       "instagramHref": "https://instagram.com/miolo.archive"
     },
