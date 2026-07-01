@@ -453,6 +453,7 @@ function layout({ relativeRoot, current, title, description, canonical, image, i
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="index,follow">
+  <meta name="facebook-domain-verification" content="l5kw4ntj2g5tx3yxtnijfnhxpwq631">
 ${getPageMeta({ title, description, canonical, image, imageAlt, imageWidth, imageHeight, imageType })}
   <link rel="icon" type="image/svg+xml" href="${relativeRoot}img/brand/miolo-favicon.svg">
   <link rel="stylesheet" href="${relativeRoot}assets/css/site.css">
