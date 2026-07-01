@@ -6,6 +6,7 @@ const imgDir = path.join(root, "img");
 const outputDataFile = path.join(root, "assets/js/site-data.js");
 const socialImage = "https://miolo.online/img/brand/miolo-og.jpg";
 const socialImageAlt = "miolo - conteudo visual para gastronomia, produto e hospitalidade";
+const metaPixelId = "959797017112455";
 
 const site = {
   name: "miolo",
@@ -446,6 +447,29 @@ function footer(relativeRoot, current) {
   </footer>`;
 }
 
+function metaPixelHead() {
+  return `  <!-- Meta Pixel Code -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '${metaPixelId}');
+    fbq('track', 'PageView');
+  </script>
+  <!-- End Meta Pixel Code -->`;
+}
+
+function metaPixelNoscript() {
+  return `  <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=${metaPixelId}&ev=PageView&noscript=1"
+    alt=""></noscript>`;
+}
+
 function layout({ relativeRoot, current, title, description, canonical, image, imageAlt, imageWidth, imageHeight, imageType, bodyClass = "", main }) {
   return `<!DOCTYPE html>
 <html lang="pt-BR">
@@ -457,8 +481,10 @@ function layout({ relativeRoot, current, title, description, canonical, image, i
 ${getPageMeta({ title, description, canonical, image, imageAlt, imageWidth, imageHeight, imageType })}
   <link rel="icon" type="image/svg+xml" href="${relativeRoot}img/brand/miolo-favicon.svg">
   <link rel="stylesheet" href="${relativeRoot}assets/css/site.css">
+${metaPixelHead()}
 </head>
 <body class="${bodyClass}">
+${metaPixelNoscript()}
   ${header(relativeRoot, current)}
   ${main}
   ${footer(relativeRoot, current)}
